@@ -15,7 +15,7 @@ PLATFORMS = [
     Platform.COVER,
 ]
 
-_LOGGER = logging.getLogger(DOMAIN)
+LOGGER = logging.getLogger(DOMAIN)
 
 _TOKEN = ""
 _SECRET = ""
@@ -38,6 +38,3 @@ def fetch_devices(token, secret):
 def set_token_and_secret(token, secret):
     _TOKEN = token
     _SECRET = secret
-
-def logging():
-    return _LOGGER

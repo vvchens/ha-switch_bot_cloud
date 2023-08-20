@@ -14,7 +14,7 @@ from homeassistant.helpers.reload import setup_reload_service
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-from . import DOMAIN, PLATFORMS, send_command, fetch_status, fetch_devices, set_token_and_secret, logging
+from . import DOMAIN, PLATFORMS, send_command, fetch_status, fetch_devices, set_token_and_secret, LOGGER
 
 
 _COVERS_SCHEMA = vol.All(
@@ -56,7 +56,7 @@ def setup_platform(
     setup_reload_service(hass, DOMAIN, PLATFORMS)
 
     set_token_and_secret(config[CONF_API_TOKEN], config[CONF_CLIENT_SECRET])
-    logging.info("Set token & secret")
+    LOGGER.info("Set token & secret")
 
     covers = []
     covers_conf = config[CONF_COVERS]
