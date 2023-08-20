@@ -54,6 +54,7 @@ def setup_platform(
 
     setup_reload_service(hass, DOMAIN, PLATFORMS)
 
+    print(config)
     set_token_and_key(config[CONF_API_TOKEN], config[CONF_API_KEY])
     LOGGER.info("Set token & key")
 
@@ -83,6 +84,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
 
         unique_id,
     ):
+        super().__init__()
         """Initialize the cover."""
         self._attr_name = name
         self._attr_unique_id = unique_id

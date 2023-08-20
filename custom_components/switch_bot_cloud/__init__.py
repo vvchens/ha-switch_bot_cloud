@@ -38,4 +38,4 @@ def fetch_devices():
 def set_token_and_key(token, key):
     _TOKEN = token
     _KEY = key
-    LOGGER.info("token: " + token + ", secret: " + key)
+    print("token: " + token + ", secret: " + key)
