@@ -102,7 +102,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
 
 
     def _update_position(self):
-        body = fetch_status()
+        body = fetch_status(self._device_id)
 
         self._battery = body['battery']
         self._attr_current_cover_position = body['slidePosition']
