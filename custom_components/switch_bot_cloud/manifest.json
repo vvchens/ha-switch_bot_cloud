@@ -1,0 +1,8 @@
+{
+  "domain": "switch_bot_cloud",
+  "name": "Switch Bot Cloud",
+  "documentation": "https://github.com/vvchens/ha-switch_bot_cloud",
+  "codeowners": ["@vvchens"],
+  "iot_class": "cloud_polling",
+  "version": "2023.8.20"
+}
