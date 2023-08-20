@@ -6,7 +6,7 @@ from threading import Timer
 import voluptuous as vol
 
 from homeassistant.components.cover import PLATFORM_SCHEMA, CoverEntity, ATTR_POSITION, CoverEntityFeature
-from homeassistant.const import CONF_API_TOKEN, CONF_CLIENT_SECRET, CONF_COVERS, CONF_NAME, CONF_DEVICE_ID, CONF_DEVICE_CLASS, CONF_UNIQUE_ID, STATE_CLOSED, STATE_CLOSING, STATE_OPEN, STATE_OPENING, STATE_UNKNOWN
+from homeassistant.const import CONF_API_TOKEN, CONF_API_KEY, CONF_COVERS, CONF_NAME, CONF_DEVICE_ID, CONF_DEVICE_CLASS, CONF_UNIQUE_ID, STATE_CLOSED, STATE_CLOSING, STATE_OPEN, STATE_OPENING, STATE_UNKNOWN
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -40,11 +40,10 @@ _COVERS_SCHEMA = vol.All(
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_API_TOKEN): cv.string,
-        vol.Required(CONF_CLIENT_SECRET): cv.string,
+        vol.Required(CONF_API_KEY): cv.string,
         vol.Required(CONF_COVERS): _COVERS_SCHEMA,
     }
 )
-
 
 def setup_platform(
     hass: HomeAssistant,
