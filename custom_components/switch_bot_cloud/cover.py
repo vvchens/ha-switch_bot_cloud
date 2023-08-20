@@ -93,16 +93,10 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         self._moving = False
         self._battery = -1
         self._attr_supported_features = (CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION)
+        self._update_position()
 
-    async def async_added_to_hass(self):
-        """Run when entity about to be added."""
-        await super().async_added_to_hass()
-
-        await self._update_position()
-
-
-    async def _update_position(self):
-        body = await fetch_status(self._device_id)
+    def _update_position(self):
+        body = fetch_status(self._device_id)
 
         self._battery = body['battery']
         self._attr_current_cover_position = body['slidePosition']
