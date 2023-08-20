@@ -8,7 +8,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 
-from send_request import request
+from .send_request import request
 
 DOMAIN = "switch_bot_cloud"
 PLATFORMS = [
