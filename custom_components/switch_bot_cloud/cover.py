@@ -122,7 +122,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         if body['moving'] == True:
             self._state = STATE_OPENING if self._state == STATE_OPEN else STATE_CLOSING
 
-    def _trigger(self, command, parameter):
+    def _trigger(self, command, parameter="default"):
         send_command(self._device_id, command, parameter)
         while(self._state == STATE_OPENING or self._state == STATE_CLOSING): 
             sleep(5)
@@ -144,4 +144,4 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         position = kwargs[ATTR_POSITION]
         direction = "up" if position > 50 else "down"
         self._state = STATE_CLOSING if position == 0 or position == 100 else STATE_OPENING
-        self._trigger("setPosition", direction + ";" + position)
+        self._trigger("setPosition", direction + ";" + str(position))
