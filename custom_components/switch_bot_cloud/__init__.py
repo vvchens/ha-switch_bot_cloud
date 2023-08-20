@@ -25,6 +25,7 @@ def setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 
 def send_command(device_id, command, parameter="default"):
+    print("device_id: " + device_id + " command: " + command + ", parameter: " + parameter)
     return request(_TOKEN, _KEY, "/v1.1/devices/" + device_id + "/commands", {"commandType": "command", "command": command, "parameter": parameter}, "POST")
 
 
@@ -38,4 +39,4 @@ def fetch_devices():
 def set_token_and_key(token, key):
     _TOKEN = token
     _KEY = key
-    print("token: " + token + ", secret: " + key)
+    print("token: " + _TOKEN + ", secret: " + _KEY)
