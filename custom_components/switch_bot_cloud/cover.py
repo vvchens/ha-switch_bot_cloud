@@ -106,7 +106,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
 
         self._battery = body['battery']
         self._attr_current_cover_position = body['slidePosition']
-        if self._attr_current_cover_position == 0 or self._attr_current_cover_position == 100
+        if self._attr_current_cover_position == 0 or self._attr_current_cover_position == 100:
             self._state = STATE_CLOSED
         else:
             self._state = STATE_OPEN
