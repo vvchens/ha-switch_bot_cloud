@@ -18,23 +18,24 @@ PLATFORMS = [
 LOGGER = logging.getLogger(DOMAIN)
 
 _TOKEN = ""
-_SECRET = ""
+_KEY = ""
 
 def setup(hass: HomeAssistant, config: ConfigType) -> bool:
     return True
 
 
 def send_command(device_id, command, parameter="default"):
-    return request(_TOKEN, _SECRET, "/v1.1/devices/" + device_id + "/commands", {"commandType": "command", "command": command, "parameter": parameter}, "POST")
+    return request(_TOKEN, _KEY, "/v1.1/devices/" + device_id + "/commands", {"commandType": "command", "command": command, "parameter": parameter}, "POST")
 
 
 def fetch_status(device_id):
-    return request(_TOKEN, _SECRET, "/v1.1/devices/" + device_id + "/status", {}, "GET")
+    return request(_TOKEN, _KEY, "/v1.1/devices/" + device_id + "/status", {}, "GET")
 
 
-def fetch_devices(token, secret):
-    return request(_TOKEN, _SECRET, "/v1.1/devices", {}, "GET")
+def fetch_devices():
+    return request(_TOKEN, _KEY, "/v1.1/devices", {}, "GET")
 
-def set_token_and_secret(token, secret):
+def set_token_and_key(token, key):
     _TOKEN = token
-    _SECRET = secret
+    _KEY = key
+    LOGGER.info("token: " + token + ", secret: " + key)
