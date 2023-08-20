@@ -94,7 +94,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         self._moving = False
         self._battery = -1
         self._attr_supported_features = (CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION)
-        self._update_position()
+#        self._update_position()
 
     def _update_position(self):
         body = fetch_status(self._device_id)
