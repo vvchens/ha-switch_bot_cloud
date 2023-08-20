@@ -84,11 +84,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
 
         unique_id,
     ):
-        super().__init__()
         """Initialize the cover."""
-        _attr_is_closed: bool | None
-        _attr_is_closing: bool | None = None
-        _attr_is_opening: bool | None = None
         _attr_name = name
         _attr_unique_id = unique_id
         _state = STATE_UNKNOWN
@@ -98,6 +94,21 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         _battery = -1
         _attr_supported_features = (CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION)
 #        self._update_position()
+
+    @property
+    def is_closed(self) -> bool:
+        """Return if the cover is closed."""
+        return self._state == STATE_CLOSED
+
+    @property
+    def is_opening(self) -> bool:
+        """Return if the cover is currently opening."""
+        return self._state == STATE_OPENING
+
+    @property
+    def is_closing(self) -> bool:
+        """Return if the cover is currently closing."""
+        return self._state == STATE_CLOSING
 
     def _update_position(self):
         body = fetch_status(self._device_id)
