@@ -40,7 +40,10 @@ def request(token, secret, path, data={}, method='GET'):
     conn.request(method, path, body=encoded_data, headers=headers)
     resp = conn.getresponse()
     data = resp.read()
-    response = json.loads(data.decode('utf-8'))
+    respStr = data.decode('utf-8')
+    print(resp)
+    print(respStr)
+    response = json.loads(respStr)
     conn.close()
 
     if response['statusCode'] == 190:
