@@ -14,7 +14,6 @@ BASE_URL = 'api.switch-bot.com'
 
 
 def request(token, secret, path, data={}, method='GET'):
-
     # Switchbot authentication using secrets.yaml
     # token = SECRETS.get('switchbot_api_token')
     # secret =  SECRETS.get('switchbot_secret_key')
