@@ -85,14 +85,14 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         unique_id,
     ):
         """Initialize the cover."""
-        _attr_name = name
-        _attr_unique_id = unique_id
-        _state = STATE_UNKNOWN
-        _device_id = device_id
-        _attr_device_class = device_class
-        _moving = False
-        _battery = -1
-        _attr_supported_features = (CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION)
+        self._attr_name = name
+        self._attr_unique_id = unique_id
+        self._state = STATE_UNKNOWN
+        self._device_id = device_id
+        self._attr_device_class = device_class
+        self._moving = False
+        self._battery = -1
+        self._attr_supported_features = (CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION)
 #        self._update_position()
 
     @property
