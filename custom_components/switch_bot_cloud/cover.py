@@ -14,7 +14,7 @@ from homeassistant.helpers.reload import setup_reload_service
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-from . import DOMAIN, PLATFORMS, send_command, fetch_status, fetch_devices, set_token_and_key, LOGGER
+from . import DOMAIN, PLATFORMS, SwitchBotCloud
 
 
 _COVERS_SCHEMA = vol.All(
@@ -54,9 +54,7 @@ def setup_platform(
 
     setup_reload_service(hass, DOMAIN, PLATFORMS)
 
-    print(config)
-    set_token_and_key(config[CONF_API_TOKEN], config[CONF_API_KEY])
-    LOGGER.info("Set token & key")
+    cloud = SwitchBotCloud(config[CONF_API_TOKEN], config[CONF_API_KEY])
 
     covers = []
     covers_conf = config[CONF_COVERS]
@@ -68,6 +66,7 @@ def setup_platform(
                 cover[CONF_DEVICE_ID],
                 cover[CONF_DEVICE_CLASS],
                 cover.get(CONF_UNIQUE_ID),
+                cloud,
             )
         )
     add_entities(covers)
@@ -83,8 +82,10 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         device_class,
 
         unique_id,
+        cloud,
     ):
         """Initialize the cover."""
+        self._cloud = cloud
         self._attr_name = name
         self._attr_unique_id = unique_id
         self._state = STATE_UNKNOWN
@@ -93,7 +94,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         self._moving = False
         self._battery = -1
         self._attr_supported_features = (CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION)
-#        self._update_position()
+        self._update_position()
 
     @property
     def is_closed(self) -> bool:
@@ -111,7 +112,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         return self._state == STATE_CLOSING
 
     def _update_position(self):
-        body = fetch_status(self._device_id)
+        body = self._cloud.fetch_status(self._device_id)
 
         self._battery = body['battery']
         self._attr_current_cover_position = body['slidePosition']
@@ -123,7 +124,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
             self._state = STATE_OPENING if self._state == STATE_OPEN else STATE_CLOSING
 
     def _trigger(self, command, parameter="default"):
-        send_command(self._device_id, command, parameter)
+        self._cloud.send_command(self._device_id, command, parameter)
         while(self._state == STATE_OPENING or self._state == STATE_CLOSING): 
             sleep(5)
             self._update_position()
