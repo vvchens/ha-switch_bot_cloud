@@ -16,6 +16,9 @@ from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from . import DOMAIN, PLATFORMS, SwitchBotCloud
 
+CONF_DIRECTION_UP = 'up'
+CONF_DIRECTION_DOWN = 'down'
+CONF_DIRECTION = 'direction'
 
 _COVERS_SCHEMA = vol.All(
     cv.ensure_list,
@@ -27,7 +30,7 @@ _COVERS_SCHEMA = vol.All(
                 CONF_DEVICE_ID: cv.string,
                 # CONF_OPEN_PIN: cv.positive_int,
                 CONF_UNIQUE_ID: cv.string,
-                # vol.Optional(CONF_INVERT_RELAY, default=DEFAULT_INVERT_RELAY): cv.boolean,
+                vol.Optional(CONF_DIRECTION, default=CONF_DIRECTION_DOWN): cv.string,
                 # vol.Optional(CONF_INTERMEDIATE_MODE, default=DEFAULT_INTERMEDIATE_MODE): cv.boolean,
                 # vol.Optional(CONF_CLOSE_DURATION, default=DEFAULT_CLOSE_DURATION): cv.positive_int,
                 # vol.Optional(CONF_OPEN_DURATION, default=DEFAULT_OPEN_DURATION): cv.positive_int,
@@ -65,6 +68,7 @@ def setup_platform(
                 cover[CONF_NAME],
                 cover[CONF_DEVICE_ID],
                 cover[CONF_DEVICE_CLASS],
+                cover[CONF_DIRECTION]
                 cover.get(CONF_UNIQUE_ID),
                 cloud,
             )
@@ -80,6 +84,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         name,
         device_id,
         device_class,
+        direction,
 
         unique_id,
         cloud,
@@ -90,6 +95,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         self._attr_unique_id = unique_id
         self._state = STATE_UNKNOWN
         self._device_id = device_id
+        self._direction = direction
         self._attr_device_class = device_class
         self._moving = False
         self._battery = -1
@@ -115,8 +121,9 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         body = self._cloud.fetch_status(self._device_id)
 
         self._battery = body['battery']
-        self._attr_current_cover_position = body['slidePosition']
-        if self._attr_current_cover_position == 0 or self._attr_current_cover_position == 100:
+        self._attr_current_cover_position = body['slidePosition'] / 2
+        # self._direction = body['direction'].lower()
+        if self._attr_current_cover_position == 0:
             self._state = STATE_CLOSED
         else:
             self._state = STATE_OPEN
@@ -124,26 +131,37 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
             self._state = STATE_OPENING if self._state == STATE_OPEN else STATE_CLOSING
 
     def _trigger(self, command, parameter="default"):
-        print()
         self._cloud.send_command(self._device_id, command, parameter)
-        while(self._state == STATE_OPENING or self._state == STATE_CLOSING): 
-            sleep(5)
-            self._update_position()
+        # while(self._state == STATE_OPENING or self._state == STATE_CLOSING): 
+        #     sleep(5)
+        #     self._update_position()
 
     def close_cover(self, **_):
         """Close the cover."""
         self._state = STATE_CLOSING
-        self._trigger("closeDown")
+        if self._direction == CONF_DIRECTION_DOWN:
+            self._trigger("closeDown")
+            self._attr_current_cover_position = 0
+        else:
+            self._trigger("closeUp")
+            self._attr_current_cover_position = 100
+        self._state = STATE_CLOSED
 
     def open_cover(self, **_):
         """Open the cover."""
         self._state = STATE_OPENING
         self._trigger("fullyOpen")
+        self._attr_current_cover_position = 50
+        self._state = STATE_OPEN
 
 
     def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""
         position = kwargs[ATTR_POSITION]
-        direction = "up" if position > 50 else "down"
         self._state = STATE_CLOSING if position == 0 or position == 100 else STATE_OPENING
-        self._trigger("setPosition", direction + ";" + str(position))
+        direction = "down" if self.current_cover_position > position else "up"
+        if position > 50:
+            position = 100 - position
+        self._trigger("setPosition", direction + ";" + str(position * 2))
+        self._attr_current_cover_position = position
+        self._state = STATE_CLOSED if position == 0 or position == 100 else STATE_OPEN
