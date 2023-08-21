@@ -68,7 +68,7 @@ def setup_platform(
                 cover[CONF_NAME],
                 cover[CONF_DEVICE_ID],
                 cover[CONF_DEVICE_CLASS],
-                cover[CONF_DIRECTION]
+                cover[CONF_DIRECTION],
                 cover.get(CONF_UNIQUE_ID),
                 cloud,
             )
