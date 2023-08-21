@@ -124,6 +124,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
             self._state = STATE_OPENING if self._state == STATE_OPEN else STATE_CLOSING
 
     def _trigger(self, command, parameter="default"):
+        print()
         self._cloud.send_command(self._device_id, command, parameter)
         while(self._state == STATE_OPENING or self._state == STATE_CLOSING): 
             sleep(5)
