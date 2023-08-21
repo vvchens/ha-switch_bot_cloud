@@ -120,7 +120,7 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
             self._state = STATE_CLOSED
         else:
             self._state = STATE_OPEN
-        if body['moving'] == True:
+        if 'moving' in body and body['moving'] == True:
             self._state = STATE_OPENING if self._state == STATE_OPEN else STATE_CLOSING
 
     def _trigger(self, command, parameter="default"):
