@@ -159,8 +159,9 @@ class SwitchBotCloudCover(CoverEntity, RestoreEntity):
         """Move the cover to a specific position."""
         position = kwargs[ATTR_POSITION]
         self._state = STATE_CLOSING if position == 0 or position == 100 else STATE_OPENING
-        direction = "down" if self.current_cover_position > position else "up"
+        direction = "down"
         if position > 50:
+            direction = "up"
             position = 100 - position
         self._trigger("setPosition", direction + ";" + str(position * 2))
         self._attr_current_cover_position = position
