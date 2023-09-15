@@ -23,7 +23,7 @@ class SwitchBotCloud:
         self._TOKEN = token
         self._KEY = key
 
-    def send_command(self, device_id, command, parameter="default"):
+    def send_command(self, device_id: str, command: str, parameter="default"):
         # print("device_id: " + device_id + " command: " + command + ", parameter: " + parameter)
         return request(self._TOKEN, self._KEY, "/v1.1/devices/" + device_id + "/commands", {"commandType": "command", "command": command, "parameter": parameter}, "POST")
 

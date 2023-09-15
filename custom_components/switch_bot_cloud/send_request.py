@@ -2,12 +2,9 @@ import base64
 import hashlib
 import hmac
 import json
-import os
-import sys
 import time
 import uuid
 from http.client import HTTPSConnection
-import yaml
 
 SECRETS = None
 BASE_URL = 'api.switch-bot.com'

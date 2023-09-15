@@ -30,7 +30,7 @@ _COVERS_SCHEMA = vol.All(
                 CONF_DEVICE_ID: cv.string,
                 # CONF_OPEN_PIN: cv.positive_int,
                 CONF_UNIQUE_ID: cv.string,
-                vol.Optional(CONF_DIRECTION, default=CONF_DIRECTION_DOWN): cv.string,
+                vol.Optional(CONF_DIRECTION, default=CONF_DIRECTION_DOWN): cv.string, # type: ignore
                 # vol.Optional(CONF_INTERMEDIATE_MODE, default=DEFAULT_INTERMEDIATE_MODE): cv.boolean,
                 # vol.Optional(CONF_CLOSE_DURATION, default=DEFAULT_CLOSE_DURATION): cv.positive_int,
                 # vol.Optional(CONF_OPEN_DURATION, default=DEFAULT_OPEN_DURATION): cv.positive_int,
